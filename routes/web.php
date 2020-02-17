@@ -22,5 +22,3 @@ Route::post('/Book/Submit', 'BooksController@submit');
 Route::get('/Book/Update/{id}', 'BooksController@update');
 
 Route::get('/Book/Delete/{id}', 'BooksController@delete'); // TODO Change to DELETE to implement csrf
-
-Route::get('/Author/Update/{id}', 'AuthorsController@update');
