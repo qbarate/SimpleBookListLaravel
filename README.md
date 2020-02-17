@@ -11,5 +11,8 @@ On windows, to get around the mandatory filename limitation, run the following c
 - On the command terminal, run: **php artisan key:generate**
 - Create the *database/database.sqlite* file.
 - On the command terminal, run: **php artisan migrate**
+- On the command terminal, run: **php artisan serve**
+
+At this point, you should be able to visit **http://127.0.0.1:8000/** and use the project.
 
 There is no database configuration since data is stored in the *database/database.sqlite* file that has been created.
