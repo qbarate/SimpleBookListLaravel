@@ -27,7 +27,7 @@
             </div>
             @endif
 
-            <a class="mx-1" href="/Book/Create"><button type="button" class="btn btn-primary">Create Book</button></a> <!-- TODOQBA <a> is probably not necessary -->
+            <a class="mx-1" href="/Book/Create"><button type="button" class="btn btn-primary">Create Book</button></a>
             <button type="button" class="btn btn-info mx-1" data-toggle="modal" data-target="#exportModal">Export...</button>
 
             <table id="bookList"></table>
@@ -51,8 +51,8 @@
                         <a id="downloadExport" download="" href=”” style="display: none;"></a>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" onCLick="exportCSV()">Export CSV</button>
-                        <button type="button" class="btn btn-primary" onCLick="exportXML('Book')">Export XML</button>
+                        <button type="button" class="btn btn-primary" onCLick="exportCSV()">Generate CSV</button>
+                        <button type="button" class="btn btn-primary" onCLick="exportXML('Book')">Generate XML</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
             var binUrl = "{{URL::asset('/icons/trash-alt-solid.svg')}}";
             var penUrl = "{{URL::asset('/icons/pen-solid.svg')}}";
         </script>
-        <script src="{{URL::asset('/bookList.js')}}"></script> <!-- TODO: Move the js to its appropriate place -->
+        <script src="{{URL::asset('/bookList.js')}}"></script>
     </body>
     <!-- Icons: https://fontawesome.com/license -->
 </html>

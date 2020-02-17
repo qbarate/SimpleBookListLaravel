@@ -119,6 +119,29 @@ function exportCSV() {
 }
 
 /**
+ * Array taken from: https://dracoblue.net/dev/encodedecode-special-xml-characters-in-javascript/
+ * I only completed it with the apostrophe
+ */
+var xml_special_to_escaped_one_map = {
+    '&': '&amp;',
+    '"': '&quot;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&apos'
+};
+
+/**
+ * Code taken from: https://dracoblue.net/dev/encodedecode-special-xml-characters-in-javascript/
+ * Encodes the XML special characters so the attributes to export won't break the XML format.
+ * @param {*} string Text to encode
+ */
+function encodeXml(string) {
+    return string.replace(/([\&"<>])/g, function(str, item) {
+        return xml_special_to_escaped_one_map[item];
+    });
+};
+
+/**
  * Exports the currently filtered books as a XML file.
  */
 function exportXML(exportedObject) {
@@ -139,7 +162,7 @@ function exportXML(exportedObject) {
 
         dataToExport.forEach(column => {
             xmlElementNodes.push("<" + column + ">");
-            xmlElementNodes.push(book[column]);
+            xmlElementNodes.push(encodeXml(book[column]));
             xmlElementNodes.push("</" + column + ">");
         });
         xmlElements.push(xmlElementNodes.join(''));
