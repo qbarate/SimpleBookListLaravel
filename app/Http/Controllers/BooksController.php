@@ -14,14 +14,14 @@ class BooksController extends Controller
     /**
      * Gets the main application view.
      */
-    public function index(Request $request) {
+    public function index() {
         return view('BooksList');
     }
 
     /**
      * Returns the selected list of books.
      */
-    public function list(Request $request) {
+    public function list() {
         $books = DB::table('Books')
             ->join('Authors', 'Books.BooksAuthors', '=', 'Authors.Id')
             ->select(
@@ -33,10 +33,17 @@ class BooksController extends Controller
         return $books;
     }
 
+    /**
+     * Returns the book creation view.
+     */
     public function create() {
         return view('BooksCreateUpdate');
     }
 
+    /**
+     * Returns the book update view, pre-filled with the correct book information.
+     * @param int $id Id of the book to update
+     */
     public function update($id) {
         if (!is_numeric($id))
             return redirect()->action('BooksController@index');
@@ -49,6 +56,7 @@ class BooksController extends Controller
 
     /**
      * Delete the Book with the selected id
+     * @param Request $request
      */
     public function delete(Request $request) {
         $validator = Validator::make($request->all(), [
@@ -68,6 +76,10 @@ class BooksController extends Controller
         return redirect()->action('BooksController@index');
     }
 
+    /**
+     * Finalizes the book creation/update.
+     * @param Request $request
+     */
     public function submit(Request $request) {
         $validator = Validator::make($request->all(), [
             'bookName' => 'required|max:255',

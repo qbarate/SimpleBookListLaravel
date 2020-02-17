@@ -1,19 +1,31 @@
-// TODO Document all this javascript
 var booksToDisplay = [];
 
+/**
+ * Defines the content of the action column of the book display (with 'Edit' and 'Delete' buttons)
+ * @param {*} value Id of the book (corresponds to the BookId field)
+ * @param {*} row Full Book object
+ * @param {*} index Index of the book in the table
+ */
 function deleteFormatter(value, row, index) {
     return '<a href="/Book/Update/' + value + '"><img class="updateIcon" src="' + penUrl + '"/></a> \
             <a onClick="confirmDelete(' + value + ')" href="#"><img class="deleteIcon" src="' + binUrl + '"/></a>';
 }
 
-function confirmDelete(bookToDelete) {
-    var bookData = booksToDisplay.find(book => book.BookId == bookToDelete);
+/**
+ * Fills and displays the delete confirmation modal.
+ * @param {*} bookToDeleteId Id of the book to delete.
+ */
+function confirmDelete(bookToDeleteId) {
+    var bookData = booksToDisplay.find(book => book.BookId == bookToDeleteId);
 
-    $("#bookIdToDelete").val(bookToDelete);
+    $("#bookIdToDelete").val(bookToDeleteId);
     $("#bookNameToDelete").html(bookData.BookName);
     $('#confirmDeleteModal').modal('show');
 }
 
+/**
+ * Sets-up the bootstrap table to display the queried list of books.
+ */
 function displayBooks() {
     $('#bookList').bootstrapTable({
         search: true,
@@ -42,6 +54,9 @@ function displayBooks() {
     });
 }
 
+/**
+ * Asynchronously loads the list of books from the back-end and displays them all.
+ */
 function loadAndDisplayBooks() {
     $.ajax({
         type: "GET",
@@ -58,6 +73,11 @@ function loadAndDisplayBooks() {
     });
 }
 
+/**
+ * Generates the download button for the selected export.
+ * @param {string} fileContent Plaintext to write to the file download
+ * @param {string} exportType Either 'xml' or 'csv' depending on the export.
+ */
 function generateDownloadButton(fileContent, exportType) {
     var exportData = new Blob([fileContent], {type: 'text/plain'});
     var url = window.URL.createObjectURL(exportData);
@@ -68,6 +88,9 @@ function generateDownloadButton(fileContent, exportType) {
     $("#downloadExport").show();
 }
 
+/**
+ * Exports the currently filtered books as a CSV file.
+ */
 function exportCSV() {
     var dataToExport = $("#fieldsToExport input[type='checkbox']:checked").map(function () {return $(this).val()}).toArray();
     var booksToExport = $('#bookList').bootstrapTable('getData');
@@ -95,6 +118,9 @@ function exportCSV() {
     generateDownloadButton(fileContent, "csv");
 }
 
+/**
+ * Exports the currently filtered books as a XML file.
+ */
 function exportXML(exportedObject) {
     var dataToExport = $("#fieldsToExport input[type='checkbox']:checked").map(function () {return $(this).val()}).toArray();
     var booksToExport = $('#bookList').bootstrapTable('getData');
