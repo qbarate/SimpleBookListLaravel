@@ -1,10 +1,17 @@
 // TODO Document all this javascript
-var books = []; // TODOQBA Voir si on conserve ça
 var booksToDisplay = [];
 
 function deleteFormatter(value, row, index) {
     return '<a href="/Book/Update/' + value + '"><img class="updateIcon" src="' + penUrl + '"/></a> \
-            <a href="/Book/Delete/' + value + '"><img class="deleteIcon" src="' + binUrl + '"/></a>';
+            <a onClick="confirmDelete(' + value + ')" href="#"><img class="deleteIcon" src="' + binUrl + '"/></a>';
+}
+
+function confirmDelete(bookToDelete) {
+    var bookData = booksToDisplay.find(book => book.BookId == bookToDelete);
+
+    $("#bookIdToDelete").val(bookToDelete);
+    $("#bookNameToDelete").html(bookData.BookName);
+    $('#confirmDeleteModal').modal('show');
 }
 
 function displayBooks() {
@@ -42,8 +49,7 @@ function loadAndDisplayBooks() {
         url: "/Book/List",
         context: document.body,
         success: function(data) {
-            books = data;
-            booksToDisplay = books;
+            booksToDisplay = data;
             displayBooks();
         },
         error: function(data) {

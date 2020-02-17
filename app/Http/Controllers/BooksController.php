@@ -49,15 +49,21 @@ class BooksController extends Controller
 
     /**
      * Delete the Book with the selected id
-     * 
-     * @param mixed  $id    Id of the book to delete
      */
-    public function delete($id) {
-        if (!is_numeric($id))
-            return redirect()->action('BooksController@index');
+    public function delete(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'bookId' => 'nullable|numeric',
+        ]);
 
-        if (!Book::destroy($id))
-            return 'The Book could not be deleted.';
+        if ($validator->fails()) {
+            return back()->withErrors($validator)
+                         ->withInput();
+        }
+
+        $bookId = $request->input('bookId');
+
+        if (!Book::destroy($bookId))
+            return back()->withErrors(['Error:', 'The Book could not be deleted.']);
 
         return redirect()->action('BooksController@index');
     }
