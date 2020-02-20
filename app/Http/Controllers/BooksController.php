@@ -3,84 +3,41 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-
-use DB;
+use Illuminate\Support\Facades\Validator; // TODOQBA May delete later
 use App\Book;
 use App\Author;
 
 class BooksController extends Controller
 {
     /**
-     * Gets the main application view.
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function index() {
-        return view('BooksList');
+    public function list()
+    {
+        return Book::with('author')->get();
     }
 
     /**
-     * Returns the selected list of books.
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function list() {
-        $books = DB::table('Books')
-            ->join('Authors', 'Books.BooksAuthors', '=', 'Authors.Id')
-            ->select(
-                'Books.Id as BookId',
-                'Books.Name as BookName',
-                'Authors.Id as AuthorId',
-                'Authors.Name as AuthorName')
-            ->get();
-        return $books;
+    public function create()
+    {
+        return view('BooksCreateUpdate'); //TODOQBA Update view names
     }
 
     /**
-     * Returns the book creation view.
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
-    public function create() {
-        return view('BooksCreateUpdate');
-    }
-
-    /**
-     * Returns the book update view, pre-filled with the correct book information.
-     * @param int $id Id of the book to update
-     */
-    public function update($id) {
-        if (!is_numeric($id))
-            return redirect()->action('BooksController@index');
-
-        $book = Book::find($id);
-        $author = Author::find($book->BooksAuthors);
-
-        return view('BooksCreateUpdate', compact('book', 'author'));
-    }
-
-    /**
-     * Delete the Book with the selected id
-     * @param Request $request
-     */
-    public function delete(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'bookId' => 'nullable|numeric',
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)
-                         ->withInput();
-        }
-
-        $bookId = $request->input('bookId');
-
-        if (!Book::destroy($bookId))
-            return back()->withErrors(['Error:', 'The Book could not be deleted.']);
-
-        return redirect()->action('BooksController@index');
-    }
-
-    /**
-     * Finalizes the book creation/update.
-     * @param Request $request
-     */
-    public function submit(Request $request) {
+    public function store(Request $request)
+    {
+        // TODOQBA Old code, rewrite asap
         $validator = Validator::make($request->all(), [
             'bookName' => 'required|max:255',
             'authorName' => 'required|max:255',
@@ -122,6 +79,62 @@ class BooksController extends Controller
             Book::create(['Name' => $bookName, 'BooksAuthors' => $author->Id]);
         }
         
-        return redirect()->action('BooksController@index');
+        return redirect('/');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'bookId' => 'nullable|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)
+                         ->withInput();
+        }
+
+        $bookId = $request->input('bookId');
+
+        if (!Book::destroy($bookId))
+            return back()->withErrors(['Error:', 'The Book could not be deleted.']);
+
+        return redirect('/'); // TODOQBA Implement a confirmation message when getting back to the main page
     }
 }

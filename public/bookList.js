@@ -16,10 +16,11 @@ function deleteFormatter(value, row, index) {
  * @param {*} bookToDeleteId Id of the book to delete.
  */
 function confirmDelete(bookToDeleteId) {
-    var bookData = booksToDisplay.find(book => book.BookId == bookToDeleteId);
+    console.log(bookToDeleteId);
+    var bookData = booksToDisplay.find(book => book.Id == bookToDeleteId);
 
     $("#bookIdToDelete").val(bookToDeleteId);
-    $("#bookNameToDelete").html(bookData.BookName);
+    $("#bookNameToDelete").html(bookData.Name);
     $('#confirmDeleteModal').modal('show');
 }
 
@@ -30,23 +31,23 @@ function displayBooks() {
     $('#bookList').bootstrapTable({
         search: true,
         columns: [{
-            field: 'BookId',
+            field: 'Id',
             title: '#',
             class: 'bookId',
             sortable: true,
         },{
-            field: 'BookName',
+            field: 'Name',
             title: 'Title',
             sortable: true,
         }, {
-            field: 'AuthorName',
+            field: 'author.Name',
             title: 'Author',
             sortable: true
         }, {
             field: 'Delete',
             title: '',
             sortable: false,
-            field: 'BookId',
+            field: 'Id',
             formatter: deleteFormatter,
             width: 84
         }],
@@ -61,13 +62,15 @@ function loadAndDisplayBooks() {
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: "/Book/List",
+        url: "/books",
         context: document.body,
         success: function(data) {
+            console.log(data);
             booksToDisplay = data;
             displayBooks();
         },
         error: function(data) {
+            console.log(data.responseText);
             alert("Error: " + data.status);
         }
     });

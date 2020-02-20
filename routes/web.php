@@ -1,13 +1,11 @@
 <?php
 
-Route::get('/', 'BooksController@index');
+Route::get('/', 'HomeController@index');
 
-Route::get('/Book/List', 'BooksController@list');
+Route::get( '/books',               'BooksController@list');
+Route::get( '/books/create',        'BooksController@create');
+Route::post('/books',               'BooksController@store');
+Route::get( '/books/Update/{id}',   'BooksController@update');
 
-Route::get('/Book/Create', 'BooksController@create');
-
-Route::post('/Book/Submit', 'BooksController@submit');
-
-Route::get('/Book/Update/{id}', 'BooksController@update');
-
-Route::post('/Book/Delete/', 'BooksController@delete');
+// TODOQBA No support for delete ? What about csrf ?
+Route::post('/books/delete', 'BooksController@destroy');
