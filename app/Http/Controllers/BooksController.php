@@ -26,7 +26,7 @@ class BooksController extends Controller
      */
     public function create()
     {
-        return view('BooksCreateUpdate'); //TODOQBA Update view names
+        return view('books/create');
     }
 
     /**
@@ -37,11 +37,9 @@ class BooksController extends Controller
      */
     public function store(Request $request)
     {
-        // TODOQBA Old code, rewrite asap
         $validator = Validator::make($request->all(), [
             'bookName' => 'required|max:255',
             'authorName' => 'required|max:255',
-            'bookId' => 'nullable|numeric',
         ]);
 
         if ($validator->fails()) {
@@ -49,37 +47,22 @@ class BooksController extends Controller
                          ->withInput();
         }
 
+        // TODOQBA have a separate controller for authors & create authors there
         $bookName = $request->input('bookName');
         $authorName = $request->input('authorName');
 
-        $bookId = $request->input('bookId');
-
-        // If a book is specified, we update its data
-        if (isSet($bookId)) {
-            // First, save the book name
-            $book = Book::find($bookId);
-            $book->Name = $bookName;
-            $book->save();
-
-            // Then, save the author name.
-            $author = Author::find($book->BooksAuthors);
-            $author->Name = $authorName;
-            $author->save();
-        }
         // This is a new book, we must create its author beforehand if it is new
-        else {
-            // Since the exercise does not specify what to do with duplicate authors, we choose the easy way :
-            // We use an already existing author if we can. Othewise we create a new author.
-            $author = Author::where('Name', $authorName)->first();
+        // Since the exercise does not specify what to do with duplicate authors, we choose the easy way :
+        // We use an already existing author if we can. Othewise we create a new author.
+        $author = Author::where('Name', $authorName)->first();
 
-            if ($author === NULL) {
-                $author = Author::create(['Name' => $authorName]);
-            }
-    
-            Book::create(['Name' => $bookName, 'BooksAuthors' => $author->Id]);
+        if ($author === NULL) {
+            $author = Author::create(['Name' => $authorName]);
         }
+
+        Book::create(['Name' => $bookName, 'BooksAuthors' => $author->Id]);
         
-        return redirect('/');
+        return redirect('/'); // TODOQBA Confirmation message
     }
 
     /**
@@ -101,7 +84,13 @@ class BooksController extends Controller
      */
     public function edit($id)
     {
-        //
+        if (!is_numeric($id))
+            return redirect('/');
+
+        $book = Book::find($id);
+        $author = Author::find($book->BooksAuthors);
+
+        return view('books/edit', compact('book', 'author'));
     }
 
     /**
@@ -113,7 +102,35 @@ class BooksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // TODOQBA See if this is really necessary
+        if (!is_numeric($id))
+            return redirect('/');
+
+        $validator = Validator::make($request->all(), [
+            'bookName' => 'required|max:255',
+            'authorName' => 'required|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)
+                         ->withInput();
+        }
+
+        $bookName = $request->input('bookName');
+        $authorName = $request->input('authorName');
+
+        // If a book is specified, we update its data
+        // First, save the book name
+        $book = Book::find($id);
+        $book->Name = $bookName;
+        $book->save();
+
+        // Then, save the author name.
+        $author = Author::find($book->BooksAuthors);
+        $author->Name = $authorName;
+        $author->save();
+
+        return redirect('/'); // TODOQBA Confirmation message
     }
 
     /**

@@ -7,7 +7,7 @@ var booksToDisplay = [];
  * @param {*} index Index of the book in the table
  */
 function deleteFormatter(value, row, index) {
-    return '<a href="/Book/Update/' + value + '"><img class="updateIcon" src="' + penUrl + '"/></a> \
+    return '<a href="/books/' + value + '/edit"><img class="updateIcon" src="' + penUrl + '"/></a> \
             <a onClick="confirmDelete(' + value + ')" href="#"><img class="deleteIcon" src="' + binUrl + '"/></a>';
 }
 
