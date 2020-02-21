@@ -62,7 +62,7 @@ class BooksController extends Controller
 
         Book::create(['Name' => $bookName, 'BooksAuthors' => $author->Id]);
         
-        return redirect('/'); // TODOQBA Confirmation message
+        return view('home', ['success' => 'Book created!']);
     }
 
     /**
@@ -130,7 +130,7 @@ class BooksController extends Controller
         $author->Name = $authorName;
         $author->save();
 
-        return redirect('/'); // TODOQBA Confirmation message
+        return view('home', ['success' => 'Book updated!']);
     }
 
     /**
@@ -152,6 +152,6 @@ class BooksController extends Controller
         if (!Book::destroy($bookId))
             return back()->withErrors(['Error:', 'The Book could not be deleted.']);
 
-        return redirect('/'); // TODOQBA Implement a confirmation message when getting back to the main page
+            return view('home', ['success' => 'Book deleted!']);
     }
 }

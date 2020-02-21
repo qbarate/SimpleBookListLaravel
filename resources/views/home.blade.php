@@ -8,6 +8,8 @@
 
 @include('includes/errors')
 
+@include('includes/success')
+
 <div>
     <a class="mx-1" href="/books/create"><button type="button" class="btn btn-primary">Create Book</button></a>
     <button type="button" class="btn btn-info mx-1" data-toggle="modal" data-target="#exportModal">Export...</button>
