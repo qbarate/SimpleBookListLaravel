@@ -7,15 +7,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}" />
 
+        @section('css')
         <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        @show
 
         <link rel="stylesheet" href="{{URL::asset('/css/bookList.css')}}"/>
     </head>
     <body>
         <div class="container">
 
-            <h1>@yield('subtitle')</h1>
+            <a href="/"><h1>@yield('subtitle')</h1></a>
 
             @yield('content')
         </div>

@@ -16,7 +16,6 @@ function deleteFormatter(value, row, index) {
  * @param {*} bookToDeleteId Id of the book to delete.
  */
 function confirmDelete(bookToDeleteId) {
-    console.log(bookToDeleteId);
     var bookData = booksToDisplay.find(book => book.Id == bookToDeleteId);
 
     $("#bookIdToDelete").val(bookToDeleteId);
@@ -44,7 +43,6 @@ function displayBooks() {
             title: 'Author',
             sortable: true
         }, {
-            field: 'Delete',
             title: '',
             sortable: false,
             field: 'Id',
@@ -65,12 +63,10 @@ function loadAndDisplayBooks() {
         url: "/books",
         context: document.body,
         success: function(data) {
-            console.log(data);
             booksToDisplay = data;
             displayBooks();
         },
         error: function(data) {
-            console.log(data.responseText);
             alert("Error: " + data.status);
         }
     });
@@ -95,88 +91,22 @@ function generateDownloadButton(fileContent, exportType) {
  * Exports the currently filtered books as a CSV file.
  */
 function exportCSV() {
-    var dataToExport = $("#fieldsToExport input[type='checkbox']:checked").map(function () {return $(this).val()}).toArray();
-    var booksToExport = $('#bookList').bootstrapTable('getData');
-    
-    if (dataToExport.length == 0 || booksToExport.length == 0) {
-        alert("No data to export.");
-        return;
-    }
-
-    var csvLines = [];
-
-    // We build the header line of the csv file
-    csvLines.push(dataToExport.join(","));
-
-    booksToExport.forEach(book => {
-        var rowValuesToExport = [];
-        dataToExport.forEach(column => {
-            // Value is put between quotes in case it contains a comma (which would break the csv formatting)
-            rowValuesToExport.push("\"" + book[column] + "\"");
-        });
-        csvLines.push(rowValuesToExport.join(','));
+    $('#bookList').tableExport({
+        type: 'csv',
+        ignoreColumn: ['Id']
     });
-
-    var fileContent = csvLines.join('\n');
-    generateDownloadButton(fileContent, "csv");
 }
-
-/**
- * Array taken from: https://dracoblue.net/dev/encodedecode-special-xml-characters-in-javascript/
- * I only completed it with the apostrophe
- */
-var xml_special_to_escaped_one_map = {
-    '&': '&amp;',
-    '"': '&quot;',
-    '<': '&lt;',
-    '>': '&gt;',
-    "'": '&apos'
-};
-
-/**
- * Code taken from: https://dracoblue.net/dev/encodedecode-special-xml-characters-in-javascript/
- * Encodes the XML special characters so the attributes to export won't break the XML format.
- * @param {*} string Text to encode
- */
-function encodeXml(string) {
-    return string.replace(/([\&"<>])/g, function(str, item) {
-        return xml_special_to_escaped_one_map[item];
-    });
-};
 
 /**
  * Exports the currently filtered books as a XML file.
  */
 function exportXML(exportedObject) {
-    var dataToExport = $("#fieldsToExport input[type='checkbox']:checked").map(function () {return $(this).val()}).toArray();
-    var booksToExport = $('#bookList').bootstrapTable('getData');
-
-    if (dataToExport.length == 0 || booksToExport.length == 0) {
-        alert("No data to export.");
-        return;
-    }
-
-    var xmlElements = [];
-    xmlElements.push('<Export>');
-
-    booksToExport.forEach(book => {
-        var xmlElementNodes = [];
-        xmlElements.push("<" + exportedObject + ">");
-
-        dataToExport.forEach(column => {
-            xmlElementNodes.push("<" + column + ">");
-            xmlElementNodes.push(encodeXml(book[column]));
-            xmlElementNodes.push("</" + column + ">");
-        });
-        xmlElements.push(xmlElementNodes.join(''));
-
-        xmlElements.push("</" + exportedObject + ">");
+    $('#bookList').tableExport({
+        type: 'xml',
+        ignoreColumn: ['Id']
     });
-    xmlElements.push('</Export>');
-
-    var fileContent = xmlElements.join('');
-    generateDownloadButton(fileContent, "xml");
 }
+
 
 $(document).ready( function () {
     $.ajaxSetup({

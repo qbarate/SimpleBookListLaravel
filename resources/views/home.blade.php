@@ -10,12 +10,18 @@
 
 @include('includes/success')
 
+@section('css')
+@parent
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.2.0/css/tableexport.min.css">
+@endsection
+
 <div>
     <a class="mx-1" href="/books/create"><button type="button" class="btn btn-primary">Create Book</button></a>
     <button type="button" class="btn btn-info mx-1" data-toggle="modal" data-target="#exportModal">Export...</button>
 </div>
 
-<table id="bookList"></table>
+<table  id="bookList"
+        data-show-export="true"></table>
 
 <!-- Export modal -->
 <div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel" aria-hidden="true">
@@ -28,9 +34,9 @@
                 </button>
             </div>
             <div class="modal-body" id="fieldsToExport">
-                <input type="checkbox" id="BookNameExport" name="BookName" value="BookName" checked/>
+                <input type="checkbox" id="BookNameExport" name="Title" value="Name" checked/>
                 <label for="BookNameExport">Title</label><br>
-                <input type="checkbox" id="AuthorNameExport" name="AuthorName" value="AuthorName" checked/>
+                <input type="checkbox" id="AuthorNameExport" name="Author" value="author.Name" checked/>
                 <label for="AuthorNameExport">Author</label><br>
                 <a id="downloadExport" download="" href=”” style="display: none;"></a>
             </div>
@@ -76,10 +82,12 @@
 @section('js')
 @parent
 <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
-        <script>
-            // We setup a few variables using blade here since blad will be unavailable in a separate .js file.
-            var binUrl = "{{URL::asset('/icons/trash-alt-solid.svg')}}";
-            var penUrl = "{{URL::asset('/icons/pen-solid.svg')}}";
-        </script>
-        <script src="{{URL::asset('/bookList.js')}}"></script>
+<script src="{{URL::asset('/FileSaver.min.js')}}"></script>
+<script src="{{URL::asset('/tableExport.min.js')}}"></script>
+<script>
+    // We setup a few variables using blade here since blad will be unavailable in a separate .js file.
+    var binUrl = "{{URL::asset('/icons/trash-alt-solid.svg')}}";
+    var penUrl = "{{URL::asset('/icons/pen-solid.svg')}}";
+</script>
+<script src="{{URL::asset('/bookList.js')}}"></script>
 @endsection
