@@ -50,9 +50,8 @@
 </div>
 
 <!-- Confirm delete modal -->
-<!-- TODOQBA: to refactor -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-    <form action="/books/delete" method="POST">
+    <form action="{{ route('delete-book') }}" method="POST">
         @csrf
         <div class="modal-dialog" role="document">
             <div class="modal-content">

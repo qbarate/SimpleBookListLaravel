@@ -7,7 +7,7 @@
 @section('content')
 
 @include('includes/errors')
-<form action="/books" method="POST">
+<form action="{{ route('store-book') }}" method="POST">
     @csrf
     <div class="form-group">
         <input type="text" class="form-control" id="bookName" name="bookName" required placeholder="Book title" value="">

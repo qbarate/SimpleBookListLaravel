@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator; // TODOQBA May delete later
+use Illuminate\Support\Facades\Validator;
 use App\Book;
 use App\Author;
 
@@ -61,8 +61,8 @@ class BooksController extends Controller
         }
 
         Book::create(['Name' => $bookName, 'BooksAuthors' => $author->Id]);
-        
-        return view('home', ['success' => 'Book created!']);
+
+        return redirect('/')->with('success', 'Book created!');
     }
 
     /**
@@ -130,7 +130,7 @@ class BooksController extends Controller
         $author->Name = $authorName;
         $author->save();
 
-        return view('home', ['success' => 'Book updated!']);
+        return redirect('/')->with('success', 'Book updated!');
     }
 
     /**
@@ -152,6 +152,6 @@ class BooksController extends Controller
         if (!Book::destroy($bookId))
             return back()->withErrors(['Error:', 'The Book could not be deleted.']);
 
-            return view('home', ['success' => 'Book deleted!']);
+            return redirect('/')->with('success', 'Book deleted!');
     }
 }
