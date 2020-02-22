@@ -16,6 +16,7 @@
         <input type="text" class="form-control" id="authorName" name="authorName" required placeholder="Author name" value="">
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary mx-1">Submit</button>
+    <a href="/"><button class="btn btn-secondary mx-1">Cancel</button></a>
 </form>
 @endsection
