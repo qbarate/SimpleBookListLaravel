@@ -7,16 +7,16 @@
 @section('content')
 
 @include('includes/errors')
-<form action="/books/{{ $book->Id }}/update" method="POST">
-    @csrf
+
+{{ Form::open(['route' => ['update-book', $book->Id]]) }}
     <div class="form-group">
-        <input type="text" class="form-control" id="bookName" name="bookName" required placeholder="Book title" value="{{ $book->Name ?? '' }}">
+        {{ Form::text('bookName', $book->Name, ['class' => 'form-control', 'placeholder' => 'Book title']) }}
     </div>
     <div class="form-group">
-        <input type="text" class="form-control" id="authorName" name="authorName" required placeholder="Author name" value="{{ $author->Name ?? '' }}">
+        {{ Form::text('authorName', $author->Name, ['class' => 'form-control', 'placeholder' => 'Author name']) }}
     </div>
 
-    <button type="submit" class="btn btn-primary mx-1">Submit</button>
-    <a href="/"><button class="btn btn-secondary mx-1">Cancel</button></a>
-</form>
+    {{ Form::submit('Submit', ['class' => 'btn btn-primary mx-1']) }}
+    @include('includes/buttons/cancel')
+{{ Form::close() }}
 @endsection

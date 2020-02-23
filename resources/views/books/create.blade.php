@@ -7,16 +7,17 @@
 @section('content')
 
 @include('includes/errors')
-<form action="{{ route('store-book') }}" method="POST">
+{{ Form::open(['route' => 'store-book']) }}
     @csrf
+
     <div class="form-group">
-        <input type="text" class="form-control" id="bookName" name="bookName" required placeholder="Book title" value="">
+        {{ Form::text('bookName', null, ['class' => 'form-control', 'placeholder' => 'Book title']) }}
     </div>
     <div class="form-group">
-        <input type="text" class="form-control" id="authorName" name="authorName" required placeholder="Author name" value="">
+        {{ Form::text('authorName', null, ['class' => 'form-control', 'placeholder' => 'Author name']) }}
     </div>
 
-    <button type="submit" class="btn btn-primary mx-1">Submit</button>
-    <a href="/"><button class="btn btn-secondary mx-1">Cancel</button></a>
-</form>
+    {{ Form::submit('Submit', ['class' => 'btn btn-primary mx-1']) }}
+    @include('includes/buttons/cancel')
+{{ Form::close() }}
 @endsection
